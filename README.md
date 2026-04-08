@@ -1,4 +1,5 @@
 Framework Core: Laravel 11/12
+PHP 8.2
 Reactive UI: Laravel Livewire v3
 Frontend Scripting: Alpine.js (Specifically used to proxy a native FileReader for robust, filesystem-agnostic Base64 image payload injections)
 Local Dev Server: Laragon (Operating on native mod_php)
