@@ -48,9 +48,15 @@
                                 </div>
                             </td>
                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize {{ $post->status === 'published' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
-                                    {{ $post->status }}
-                                </span>
+                                @if(auth()->user()->role === 'admin')
+                                    <button wire:key="toggle-{{ $post->id }}" wire:click="toggleStatus({{ $post->id }})" class="relative inline-flex items-center h-6 rounded-full w-11 focus:outline-none transition-colors ease-in-out duration-200 {{ $post->status === 'published' ? 'bg-green-500' : 'bg-gray-300' }}" title="Toggle Status">
+                                        <span class="inline-block w-4 h-4 transform bg-white rounded-full transition ease-in-out duration-200 {{ $post->status === 'published' ? 'translate-x-6' : 'translate-x-1' }}"></span>
+                                    </button>
+                                @else
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize {{ $post->status === 'published' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                        {{ $post->status }}
+                                    </span>
+                                @endif
                             </td>
                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-gray-600">{{ $post->user->name }}</td>
                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-gray-600">{{ $post->published_at ? $post->published_at->format('M d, Y H:i') : '-' }}</td>

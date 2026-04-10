@@ -21,6 +21,24 @@ class PostList extends Component
         ])->layout('layouts.app');
     }
 
+    public function toggleStatus($id)
+    {
+        $post = \App\Models\Post::findOrFail($id);
+
+        if (auth()->user()->role !== 'admin') {
+            abort(403);
+        }
+
+        $post->status = $post->status === 'published' ? 'draft' : 'published';
+        $post->save();
+
+        if ($post->status === 'published') {
+            \Illuminate\Support\Facades\Mail::to($post->user->email)->send(new \App\Mail\PostPublished($post));
+        }
+
+        session()->flash('message', 'Status updated successfully.');
+    }
+
     public function delete($id)
     {
         $post = \App\Models\Post::findOrFail($id);
