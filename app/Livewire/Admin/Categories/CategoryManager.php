@@ -67,12 +67,18 @@ class CategoryManager extends Component
 
         $this->validate($rules);
 
-        \App\Models\Category::updateOrCreate(['id' => $this->categoryId], [
+        $isNew = !$this->categoryId;
+
+        $category = \App\Models\Category::updateOrCreate(['id' => $this->categoryId], [
             'name' => $this->name,
             'slug' => $this->slug
         ]);
 
-        session()->flash('message', $this->categoryId ? 'Category updated successfully.' : 'Category created successfully.');
+        if ($isNew) {
+            \App\Jobs\NotifyAuthorsOfNewCategory::dispatch($category);
+        }
+
+        session()->flash('message', $isNew ? 'Category created successfully.' : 'Category updated successfully.');
         $this->closeModal();
         $this->resetInputFields();
     }
